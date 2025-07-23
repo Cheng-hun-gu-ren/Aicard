@@ -1220,158 +1220,48 @@
                 },
                 
                 'preset-movie-cinematic': {
-                    name: '🎬 电影收藏卡片（电影级）',
+                    name: '🎬 电影收藏卡片（简洁版）',
                     type: 'movie',
                     dimensions: '600x400',
                     style: 'cinematic',
-                    prompt: `# 电影卡片制作提示词 v2.0
+                    prompt: `请制作一张电影收藏卡片，要求：
 
-## 角色定义
-你是一位精通SVG技术和视觉设计的电影海报设计师，专注于创作精美的横向电影收藏卡片。你深知SVG文本布局的技术细节，能够精确控制文字位置和大小，避免任何视觉问题。
+## 卡片规格
+- 尺寸：600x400px
+- 风格：简洁电影海报风格
+- 格式：完整的SVG代码
 
-## 核心任务
+## 设计要求
+- 使用深色渐变背景（深蓝到黑色）
+- 简洁清晰的布局，避免元素重叠
+- 只使用系统安全字体：Arial, sans-serif
+- 不使用复杂滤镜和外部字体
+- 确保所有文字可读性良好
 
-### 1. 信息收集与整理
-- **必需信息**：片名（原语言+英文+中文）、导演、年份、片长、类型
-- **核心内容**：精炼的一句话剧情、主题精神
-- **经典元素**：1-2句经典台词（原语言版本优先）、关键视觉符号
-- **评分数据**：IMDb评分、豆瓣评分
-- **语言处理**：根据电影来源国自动调整显示语言
+## 布局结构（严格按Y轴坐标）
+1. **标题区域（Y: 40-90）**：
+   - 电影名称（原语言+中文+年份）
+   - 字体大小：24px/18px/14px
 
-### 2. SVG技术规范
-- **画布尺寸**：600×400px（固定比例）
-- **安全边距**：四周各留20px边距
-- **文字防溢出**：所有文本必须设置合理的最大宽度
-- **层级管理**：使用SVG分组确保元素不重叠
+2. **台词区域（Y: 130-200）**：
+   - 一句经典台词（原语言+中文翻译）
+   - 字体大小：16px/14px，斜体
 
-### 3. 文字布局规则
+3. **信息区域（Y: 280-320）**：
+   - 导演、类型、片长、评分信息
+   - 字体大小：12px，横向分布
 
-#### 防止文字问题的关键措施：
-\`\`\`xml
-<!-- 文字安全规则 -->
-1. 所有文本使用 text-anchor 精确定位
-2. 长文本必须分行显示，使用 <tspan> 元素
-3. 设置合理的 font-size，确保可读性
-4. 为每个文本区域预留足够空间
-5. 使用 dominant-baseline 控制垂直对齐
-\`\`\`
+## 技术要求
+- 使用简单的线性渐变背景
+- 文字颜色：白色或浅色
+- 行间距：20-25px
+- 左右居中对齐
+- 避免使用filter滤镜
 
-#### 文字大小规范：
-- **片名**：24-28px（根据长度调整）
-- **英文名**：16-18px
-- **经典台词**：14-16px（必须分行）
-- **基础信息**：12-14px
-- **最小字号**：不小于10px
-
-## 多语言显示规则
-
-### 电影来源地区判断
-1. **欧美电影**（美国、英国、法国、德国、意大利等）
-   - 第一行：英文原名
-   - 第二行：中文译名
-   - 台词：英文原文 + 中文翻译
-
-2. **日本电影**
-   - 第一行：日文原名（假名+汉字）
-   - 第二行：英文名 / 罗马音
-   - 第三行：中文译名（较小字号）
-   - 台词：日文原文 + 中文翻译
-
-3. **韩国电影**
-   - 第一行：韩文原名
-   - 第二行：英文名 / 罗马音
-   - 第三行：中文译名（较小字号）
-   - 台词：韩文原文 + 中文翻译
-
-4. **华语电影**（中国大陆、香港、台湾）
-   - 第一行：中文名
-   - 第二行：英文名
-   - 台词：中文原文
-
-## SVG代码模板
-
-\`\`\`xml
-<svg width="600" height="400" viewBox="0 0 600 400">
-  <!-- 定义渐变和滤镜 -->
-  <defs>
-    <linearGradient id="bgGradient">
-      <!-- 渐变色彩 -->
-    </linearGradient>
-    
-    <!-- 文字阴影滤镜 -->
-    <filter id="textShadow">
-      <feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.3"/>
-    </filter>
-  </defs>
-  
-  <!-- 背景层 -->
-  <rect width="600" height="400" fill="url(#bgGradient)"/>
-  
-  <!-- 标题区域 (y: 20-100) -->
-  <g id="header">
-    <!-- 原语言标题 -->
-    <text x="300" y="45" text-anchor="middle" 
-          font-size="24" font-weight="bold" fill="#fff"
-          font-family="'Noto Sans', Arial Unicode MS">
-      <tspan>原语言标题</tspan>
-    </text>
-    
-    <!-- 英文/罗马音标题 -->
-    <text x="300" y="70" text-anchor="middle" 
-          font-size="16" fill="#fff" opacity="0.9">
-      <tspan>English Title / Romanization</tspan>
-    </text>
-    
-    <!-- 中文标题（如需要） -->
-    <text x="300" y="90" text-anchor="middle" 
-          font-size="14" fill="#fff" opacity="0.7">
-      <tspan>中文译名 (年份)</tspan>
-    </text>
-  </g>
-  
-  <!-- 引言区域 (y: 120-250) -->
-  <g id="quote">
-    <!-- 原语言台词 -->
-    <text x="300" y="150" text-anchor="middle" 
-          font-size="16" fill="#fff" font-style="italic"
-          font-family="'Noto Sans', Arial Unicode MS">
-      <tspan x="300" dy="0">原语言台词第一行</tspan>
-      <tspan x="300" dy="25">原语言台词第二行</tspan>
-    </text>
-    
-    <!-- 中文翻译 -->
-    <text x="300" y="210" text-anchor="middle" 
-          font-size="14" fill="#fff" opacity="0.85">
-      <tspan x="300" dy="0">「中文翻译第一行</tspan>
-      <tspan x="300" dy="22">中文翻译第二行」</tspan>
-    </text>
-  </g>
-  
-  <!-- 信息栏 (y: 280-380) -->
-  <g id="info">
-    <!-- 使用分列布局避免重叠 -->
-    <text x="100" y="340" text-anchor="middle" 
-          font-size="12" fill="#fff">
-      <tspan>导演：XXX</tspan>
-    </text>
-    
-    <text x="250" y="340" text-anchor="middle" 
-          font-size="12" fill="#fff">
-      <tspan>类型：XXX</tspan>
-    </text>
-    
-    <text x="400" y="340" text-anchor="middle" 
-          font-size="12" fill="#fff">
-      <tspan>片长：XXX</tspan>
-    </text>
-    
-    <text x="500" y="340" text-anchor="middle" 
-          font-size="12" fill="#fff">
-      <tspan>评分：X.X</tspan>
-    </text>
-  </g>
-</svg>
-\`\`\`
+## 配色方案
+- 背景：深蓝色系渐变 (#1a1a2e 到 #16213e)
+- 文字：白色 (#ffffff)
+- 透明度：标题1.0，副标题0.9，信息0.8
 
 直接返回完整的SVG代码，无需其他说明。`,
                     variables: [],
